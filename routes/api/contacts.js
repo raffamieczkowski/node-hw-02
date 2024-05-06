@@ -14,7 +14,8 @@ router.get('/', async (req, res) => {
 
 router.get('/:contactId', async (req, res) => {
   try {
-    const contact = await Contact.findById(req.params.contactId);
+    const contactId = new mongoose.Types.ObjectId(req.params.contactId);
+    const contact = await Contact.findById(contactId);
     if (contact) {
       res.json(contact);
     } else {
@@ -38,7 +39,8 @@ router.post('/', async (req, res) => {
 
 router.delete('/:contactId', async (req, res) => {
   try {
-    await Contact.findByIdAndDelete(req.params.contactId);
+    const contactId = new mongoose.Types.ObjectId(req.params.contactId);
+    await Contact.findByIdAndDelete(contactId);
     res.json({ message: "Contact deleted" });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -47,8 +49,9 @@ router.delete('/:contactId', async (req, res) => {
 
 router.put('/:contactId', async (req, res) => {
   try {
+    const contactId = new mongoose.Types.ObjectId(req.params.contactId);
     const updatedContact = await Contact.findByIdAndUpdate(
-      req.params.contactId,
+      contactId,
       req.body,
       { new: true }
     );
